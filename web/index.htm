@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+		 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+		<title>Harmonious</title>
+		<!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" /> -->
+		<link rel="stylesheet" href="themes/metro/jquery.mobile.metro.theme.css"/>
+		<!-- <link rel="stylesheet" href="css/jquery.tablescroll.css" /> -->
+		<!-- <link rel="stylesheet" href="css/foo.css" /> -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.xdomainajax.js"></script>
+		<script type="text/javascript">
+			$(document).bind("mobileinit", function(){
+				$.mobile.page.prototype.options.addBackBtn= true;
+			});
+		</script>
+		<script type="text/javascript" src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
+		<script src="themes/metro/jquery.mobile.metro.theme.init.js" type="text/javascript"></script>
+ 		<script type="text/javascript" src="js/jquery.tablescroll.js"></script>
+		<script type="text/javascript" src="js/wx.js"></script>
+		<script type="text/javascript" src="js/guide.js"></script>
+		<script type="text/javascript">
+			$('#home').live('pageinit',function(event){
+				loadWeather("pws:MAT063");
+			});
+			$('#guide').live('pageinit',function(event){
+				// load fios tvguide. Start at index 0.
+				loadChannels(0); //disabled for now.
+				$.fn.tableScroll.defaults = {
+					flush: false, // makes the last thead and tbody column flush with the scrollbar
+					width: 470, // width of the table (head, body and foot), null defaults to the tables natural width
+					height: 400, // height of the scrollable area
+					containerClass: 'tablescroll' // the plugin wraps the table in a div with this css class
+				};
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div data-role="page" id="home">
+				<div data-role="header">
+					<h1>Harmonious</h1>
+				</div>
+
+			<div data-role="content">
+				<ul data-role="listview" data-inset="true">
+					<li><a href="#activities">Activities</a></li>
+					<li><a href="#guide">What's on TV?</a></li>
+					<li><a href="#remotes">Remote Controls</a></li>
+					<li><a href="#wx">Weather</a></li>
+					<li><a href="#stats">Status</a></li>
+				</ul>
+			</div>
+			<div id="ftr" style="text-align: center;">
+				<p>Current Outside Temperature: <span id="ftr_out">...Loading...</span></p>
+			</div>
+		</div>
+
+		<div data-role="page" id="activities">
+			<div data-role="header">
+				<h1>Activities</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" data-inset="true">
+					<li><a href="#">Watch TV</a></li>
+					<li><a href="#">Watch the Xbox 360</a></li>
+					<li><a href="#">Watch a DVD</a></li>
+					<li><a href="#">Watch the WDTV Live</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="info_dialog">
+			<div data-role="content" data-theme="c">	
+				<h2>Popup</h2>
+				<p>I have an id of "popup" on my page container and only look like a dialog because the link to me had a <code>data-rel="dialog"</code> attribute which gives me this inset look and a <code>data-transition="pop"</code> attribute to change the transition to pop. Without this, I'd be styled as a normal page.</p>		
+				<p><a href="#guide" data-role="button" data-inline="true">Watch this!</a> <a href="#guide" data-rel="back" data-role="button" data-inline="true">Close</a></p>	
+			</div>
+		</div>
+		
+		<div data-role="page" id="guide">
+			<div data-role="header">
+				<h1>What's on?</h1>
+			</div>
+
+			<div data-role="content">
+				<table id="tvguide" cellspacing="0">
+					<thead>
+						<tr>
+							<td>Channel</td>
+							<td>Time 1</td>
+							<td>Time 2</td>
+							<td>Time 3</td>
+							<td>Time 4</td>
+						</tr>
+					</thead>
+					<tbody id="chlist">
+						<!-- Populated by js. -->
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="remotes">
+			<div data-role="header">
+				<h1>Remotes</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" data-inset="true">
+					<li><a href="#fios_rmt">Verizon FiOS</a></li>
+					<li><a href="#xbox_rmt">Xbox 360</a></li>
+					<li><a href="#wdtv_rmt">WDTV Live</a></li>
+					<li><a href="#tv_rmt">Television</a></li>
+					<li><a href="#hdmi_rmt">HDMI Switcher</a></li>
+					<li><a href="#dvd_rmt">DVD Player</a></li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
