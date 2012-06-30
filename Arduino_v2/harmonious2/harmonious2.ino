@@ -2,51 +2,17 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <WebServer.h>
-#include <OneWire.h>
 #include <IRremote.h>
+#include <OneWire.h>
 
-//Define Ethernet addresses
+//config ehternet
 static uint8_t mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 static uint8_t ip[] = { 192, 168, 1, 210 };
 
-#define PREFIX ""
-#define NAMELEN 32
-#define VALUELEN 500
-WebServer webserver(PREFIX, 80);
+WebServer webserver("", 80);
 int DS18S20_Pin = 2;
 OneWire ds(DS18S20_Pin);
-
-void irCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete) {
-  char name[NAMELEN];
-  char value[VALUELEN];
-  server.httpSuccess();
-  if (type == WebServer::POST)  {
-    server.readPOSTparam(name, NAMELEN, value, VALUELEN);
-    if(strcmp(name,"type") == 0) {
-      if(strcmp(value,"raw") == 0) {
-        while (server.readPOSTparam(name, NAMELEN, value, VALUELEN)) {
-          if(strcmp(name,"code") == 0) {
-            server.print("Code: ");
-            server.print(value);
-          } else if(strcmp(name,"len") == 0) {
-            server.print(" Length: ");
-            server.print(value);
-          }
-        }
-      } else if(strcmp(value,"rc6") == 0) {
-        server.readPOSTparam(name, NAMELEN, value, VALUELEN);
-        Serial.print(name);
-        Serial.print(" ");
-        Serial.print(value);
-      } else if (strcmp(value,"sony") == 0) {
-        server.readPOSTparam(name, NAMELEN, value, VALUELEN);
-        Serial.print(name);
-        Serial.print(" ");
-        Serial.print(value);
-      }       
-    }
-  }
-}
+IRsend irsend;
 
 void tempRead(WebServer &server, WebServer::ConnectionType type, char *, bool) {
   server.httpSuccess();
@@ -55,6 +21,52 @@ void tempRead(WebServer &server, WebServer::ConnectionType type, char *, bool) {
     server.print(getTemp());
     server.print("}]}");
   }
+}
+
+void codeCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete) {
+  char param[32];
+  char value[300];
+  char rawCode[250];
+  
+//  server.httpSuccess();
+
+  if (type == WebServer::POST)  {
+    server.readPOSTparam(param, 32, value, 250);
+    if(strcmp(param,"type") == 0) {
+      if(strcmp(value,"raw") == 0) {
+        server.readPOSTparam(param, 32, value, 250);
+        if(strcmp(param,"code") == 0) {
+          strncpy(rawCode,"",strlen(value)+1);
+          strncpy(rawCode,value,strlen(value));
+//          rawCode=temp; //The rawCode pointer can now point to the new array space, rather than the old one.
+        }
+        server.readPOSTparam(param, 32, value, 250);
+      }
+      parseData(rawCode, atoi(value));
+    }
+  }
+  server.httpSuccess();
+}
+
+void parseData(char* raw, int leng) {
+  int x=0;  
+  int n=0;
+  char f[5];
+  unsigned int cde[50];
+  while(sscanf(raw, "%31[^,]%n", f, &n) == 1) {
+    raw+=n;
+    cde[x] = atoi(f);
+    if(*raw != ',') {
+      break;
+    }
+    raw++;
+   x++;
+  }
+  sendRawIR(cde, leng);
+}
+
+void sendRawIR(unsigned int *code, int len) {
+  irsend.sendRaw(code, len, 38);
 }
 
 float getTemp(){
@@ -102,11 +114,9 @@ float getTemp(){
 
 void setup() {
   Ethernet.begin(mac, ip);
-  webserver.addCommand("ir", &irCmd);
+  webserver.addCommand("ir", &codeCmd);
   webserver.addCommand("temp", &tempRead);
   webserver.begin();
-  Serial.begin(115200);
-  Serial.print("Server online.");
 }
 
 void loop() {
