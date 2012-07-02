@@ -51,6 +51,172 @@
                         }
                     ]
                 }
+            ],
+            "TV": [
+                {
+                    "type": "nec",
+                    "bits": 32,
+                    "codes": [
+                        {
+                            "input": "2FDF00F",
+                            "recall": "2FD38C7",
+                            "mute": "2FD08F7",
+                            "power": "2FD48B7",
+                            "1": "2FD807F",
+                            "2": "2FD40BF",
+                            "3": "2FDC03F",
+                            "4": "2FD20DF",
+                            "5": "2FDA05F",
+                            "6": "2FD609F",
+                            "7": "2FDE01F",
+                            "8": "2FD10EF",
+                            "9": "2FD906F",
+                            "0": "2FD00FF",
+                            "100": "2FD50AF",
+                            "ent": "2FDE817",
+                            "volup": "2FD58A7",
+                            "voldown": "2FD7887",
+                            "left": "A25D8A75",
+                            "up": "A25D01FE",
+                            "right": "A25DB24D",
+                            "down": "A25D817E",
+                            "enter": "A25D21DE"
+                        }
+                    ]
+                }
+            ],
+            "DVD": [
+                {
+                    "type": "sony",
+                    "bits": 20,
+                    "codes": [
+                        {
+                            "power": "A8B92",
+                            "eject": "68B92",
+                            "1": "B92",
+                            "2": "80B92",
+                            "3": "40B92",
+                            "4": "C0B92",
+                            "5": "20B92",
+                            "6": "A0B92",
+                            "7": "60B92",
+                            "8": "E0B92",
+                            "9": "10B92",
+                            "0": "90B92",
+                            "clear": "F0B92",
+                            "timetext": "14B92",
+                            "tv/video": "A50",
+                            "picturenavi": "AB92",
+                            "topmenu": "58B92",
+                            "menu": "D8B92",
+                            "left": "DEB92",
+                            "up": "9EB92",
+                            "right": "3EB92",
+                            "down": "5EB92",
+                            "enter": "D0B92",
+                            "return": "70B92",
+                            "display": "2AB92",
+                            "prev": "CB92",
+                            "replay": "3AB92",
+                            "advance": "28B46",
+                            "next": "8CB92",
+                            "rwd": "44B92",
+                            "play": "4CB92",
+                            "ffwd": "C4B92",
+                            "zoom": "9EB46",
+                            "pause": "9CB92",
+                            "stop": "1CB92",
+                            "slow": "5CB46",
+                            "fast": "DCB46",
+                            "sur": "5AB92",
+                            "audio": "26B92",
+                            "subtitle": "C6B92",
+                            "angle": "A6B92"
+                        }
+                    ]
+                }
+            ],
+            "Xbox360": [
+                {
+                    "type": "RC6",
+                    "bits": 36,
+                    "codes": [
+                        {
+                            "onoff": "c800f740c",
+                            "openclose": "800f7428",
+                            "xboxbutton": "c800ff464",
+                            "stop": "c800ff419",
+                            "pause": "c800f7418",
+                            "rwd": "c800ff415",
+                            "ffwd": "c800f7414",
+                            "prev": "c800ff41b",
+                            "next": "c800f741a",
+                            "play": "c800f7416",
+                            "display": "c800f744f",
+                            "title": "c800ff451",
+                            "dvdmenu": "c800f7424",
+                            "back": "c800ff423",
+                            "info": "c800f740f",
+                            "up": "c800ff41e",
+                            "left": "c800f7420",
+                            "right": "c800ff421",
+                            "down": "c800f741f",
+                            "ok": "c800ff422",
+                            "y": "c800f7426",
+                            "x": "c800ff468",
+                            "a": "c800f7466",
+                            "b": "c800ff425",
+                            "chup": "c800f7412",
+                            "chdown": "c800ff413",
+                            "voldown": "c800ff411",
+                            "volup": "c800ff410",
+                            "mute": "c800ff40e",
+                            "start": "c800ff40d",
+                            "enter": "c800ff40b",
+                            "rec": "c800f7417",
+                            "clear": "c800ff40a",
+                            "0": "c800f7400",
+                            "1": "c800f7401",
+                            "2": "c800ff402",
+                            "3": "c800f7403",
+                            "4": "c800ff404",
+                            "5": "c800f7405",
+                            "6": "c800ff406",
+                            "7": "c800f7407",
+                            "8": "c800ff408",
+                            "9": "c800f7409",
+                            "100": "c800ff41d",
+                            "reload": "c800f741c"
+                        }
+                    ]
+                }
+            ],
+            "WDTV": [
+                {
+                    "type": "nec",
+                    "bits": 32,
+                    "codes": [
+                        {
+                            "power": "219E48B7",
+                            "home": "219E609F",
+                            "left": "219EE01F",
+                            "up": "219EA05F",
+                            "right": "219E906F",
+                            "down": "219E00FF",
+                            "enter": "219E10EF",
+                            "back": "219ED827",
+                            "stop": "219E20DF",
+                            "option": "219E58A7",
+                            "rrwd": "219EF807",
+                            "playpause": "219E50AF",
+                            "ffwd": "219E7887",
+                            "prev": "219E40BF",
+                            "next": "219E807F",
+                            "search": "219EF00F",
+                            "eject": "219E08F7"
+                        }
+                    ]
+                }
             ]
         }
     ]
