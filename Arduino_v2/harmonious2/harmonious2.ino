@@ -14,45 +14,61 @@ int DS18S20_Pin = 2;
 OneWire ds(DS18S20_Pin);
 IRsend irsend;
 
+P(tempstart) = "{\"sensors\": [{\"backroom\":";
+P(tempend) = "}]}";
+
 void tempRead(WebServer &server, WebServer::ConnectionType type, char *, bool) {
   server.httpSuccess();
   if (type != WebServer::HEAD) {
-    server.print("{\"sensors\": [{\"backroom\":");
+    server.printP(tempstart);
     server.print(getTemp());
-    server.print("}]}");
+    server.printP(tempend);
   }
 }
 
 void codeCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete) {
   char param[32];
-  char value[300];
-  char rawCode[250];
-  
-//  server.httpSuccess();
-
+  char value[250];
   if (type == WebServer::POST)  {
-    server.readPOSTparam(param, 32, value, 250);
+    server.readPOSTparam(param, 32, value, 20);
     if(strcmp(param,"type") == 0) {
       if(strcmp(value,"raw") == 0) {
+        char rawCode[250];
         server.readPOSTparam(param, 32, value, 250);
         if(strcmp(param,"code") == 0) {
           strncpy(rawCode,"",strlen(value)+1);
           strncpy(rawCode,value,strlen(value));
-//          rawCode=temp; //The rawCode pointer can now point to the new array space, rather than the old one.
         }
-        server.readPOSTparam(param, 32, value, 250);
+        server.readPOSTparam(param, 32, value, 3);
+        parseRAWCode(rawCode, atoi(value));
+      } else if(strcmp(value,"rc6") == 0) {
+        server.readPOSTparam(param, 32, value, 20);
+        unsigned long long tmp = 1234;
+        server.readPOSTparam(param, 5, value, 3);
+        irsend.sendRC6(tmp,atoi(value));
+      } else if(strcmp(value,"nec") == 0) {
+        server.readPOSTparam(param, 32, value, 20);
+        unsigned long tmp = strtol(value,NULL,16);
+        server.readPOSTparam(param, 5, value, 3);
+        irsend.sendNEC(tmp,atoi(value));
+      } else if(strcmp(value,"sony") == 0) {
+        server.readPOSTparam(param, 32, value, 20);
+        unsigned long tmp = strtol(value,NULL,16);
+        server.readPOSTparam(param, 5, value, 3);
+        irsend.sendSony(tmp,atoi(value));
+        delay(200);
+        irsend.sendSony(tmp,atoi(value));
       }
-      parseData(rawCode, atoi(value));
     }
   }
   server.httpSuccess();
 }
 
-void parseData(char* raw, int leng) {
+void parseRAWCode(char* raw, int leng) {
   int x=0;  
   int n=0;
   char f[5];
-  unsigned int cde[50];
+  unsigned int cde[leng];
   while(sscanf(raw, "%31[^,]%n", f, &n) == 1) {
     raw+=n;
     cde[x] = atoi(f);
@@ -62,11 +78,9 @@ void parseData(char* raw, int leng) {
     raw++;
    x++;
   }
-  sendRawIR(cde, leng);
-}
-
-void sendRawIR(unsigned int *code, int len) {
-  irsend.sendRaw(code, len, 38);
+//  sendRawIR(cde, leng);
+  irsend.sendRaw(cde, leng, 38);
+  return;
 }
 
 float getTemp(){
@@ -106,16 +120,15 @@ float getTemp(){
  byte LSB = data[0];
 
  float tempRead = ((MSB << 8) | LSB); //using two's compliment
- float tempc = tempRead / 16;
- float tempf = tempc * 9 / 5 +32;
- 
- return tempf;
+ float tempout = tempRead / 16 * 9 / 5 + 32;
+
+ return tempout;
 }
 
 void setup() {
   Ethernet.begin(mac, ip);
   webserver.addCommand("ir", &codeCmd);
-  webserver.addCommand("temp", &tempRead);
+  webserver.addCommand("temp.json", &tempRead);
   webserver.begin();
 }
 
